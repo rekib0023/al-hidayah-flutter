@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:al_hidayah/features/login/data_domain/auth_repositories.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../models/users.dart';
 part 'login_event.dart';

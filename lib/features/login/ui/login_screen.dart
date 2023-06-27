@@ -1,4 +1,4 @@
-import 'package:al_hidayah/features/home/ui/home.dart';
+import 'package:al_hidayah/features/drawer/ui/drawer_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,7 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context, state) {
               if (state is AuthLoadedSucessState) {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const HomeScreen()));
+                    builder: (context) => DrawerWrapper(
+                          authBloc: loginBloc,
+                        )));
               }
             },
             builder: (context, state) {

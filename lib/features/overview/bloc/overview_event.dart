@@ -1,8 +1,12 @@
 part of 'overview_bloc.dart';
 
-abstract class OverviewEvent extends Equatable {
-  const OverviewEvent();
+@immutable
+abstract class OverviewEvent {}
 
-  @override
-  List<Object> get props => [];
-}
+class OverviewInitialEvent extends OverviewEvent {}
+
+class StudentOverInitialEvent extends OverviewEvent {}
+
+class EmployeeOverInitialEvent extends OverviewEvent {}
+
+class TeacherOverInitialEvent extends OverviewEvent {}

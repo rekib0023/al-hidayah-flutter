@@ -21,7 +21,7 @@ class Student {
     user = User.fromJson(json['user']);
     rollNumber = json['rollNumber'];
     batch = json['batch'];
-    classN = json['classN'];
+    classN = json['class'];
     parentsDetail = json['parentsDetail'];
   }
 
@@ -30,7 +30,7 @@ class Student {
     data['user'] = user.toJson();
     data['rollNumber'] = rollNumber;
     data['batch'] = batch;
-    data['classN'] = classN;
+    data['class'] = classN;
     data['parentsDetail'] = parentsDetail;
     return data;
   }
