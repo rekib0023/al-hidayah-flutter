@@ -1,4 +1,5 @@
 import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
+import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
 import 'package:al_hidayah/styles/colors.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +9,11 @@ class DrawerMenu extends StatelessWidget {
   const DrawerMenu({
     super.key,
     required this.bloc,
+    required this.authBloc,
   });
 
   final DrawerBloc bloc;
+  final AuthBloc authBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,7 @@ class DrawerMenu extends StatelessWidget {
                 ),
               ),
               ListTile(
+                leading: const Icon(Icons.home_outlined),
                 title: const Text('Home'),
                 onTap: () {
                   bloc.add(
@@ -48,10 +52,12 @@ class DrawerMenu extends StatelessWidget {
                 },
               ),
               ExpansionTile(
+                leading: const Icon(Icons.dashboard_outlined),
                 title: const Text('Overview'),
                 childrenPadding: const EdgeInsets.only(left: 16),
                 children: [
                   ListTile(
+                    leading: const Icon(Icons.school_outlined),
                     title: const Text('Student'),
                     onTap: () {
                       bloc.add(
@@ -62,6 +68,7 @@ class DrawerMenu extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.admin_panel_settings_outlined),
                     title: const Text('Management'),
                     onTap: () {
                       bloc.add(
@@ -72,6 +79,7 @@ class DrawerMenu extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.supervisor_account_outlined),
                     title: const Text('Employee'),
                     onTap: () {
                       bloc.add(
@@ -82,7 +90,26 @@ class DrawerMenu extends StatelessWidget {
                     },
                   ),
                 ],
-              )
+              ),
+              ListTile(
+                leading: const Icon(Icons.announcement_outlined),
+                title: const Text("Announcements"),
+                onTap: () {
+                  bloc.add(
+                    DrawerMenuItemClickedEvent(itemName: "announcements"),
+                  );
+                  Navigator.of(context).pop();
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.logout_outlined),
+                title: const Text("Logout"),
+                onTap: () {
+                  authBloc.add(AuthLogoutButtonClickedEvent());
+                  Navigator.of(context).pop();
+                },
+              ),
             ],
           ),
         );

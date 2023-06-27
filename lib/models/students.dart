@@ -11,8 +11,8 @@ class Student {
   });
   late final String? id;
   late final User user;
-  late final String rollNumber;
-  late final String batch;
+  late final String? rollNumber;
+  late final String? batch;
   late final String classN;
   late final String parentsDetail;
 
@@ -28,7 +28,6 @@ class Student {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['user'] = user.toJson();
-    data['rollNumber'] = rollNumber;
     data['batch'] = batch;
     data['class'] = classN;
     data['parentsDetail'] = parentsDetail;

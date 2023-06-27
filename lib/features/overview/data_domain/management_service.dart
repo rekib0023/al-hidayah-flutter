@@ -31,4 +31,40 @@ class ManagementService {
       throw Exception('Failed to load students: $error');
     }
   }
+
+  Future<List<Student>> getStudentsByClass(String classN) async {
+    try {
+      final response = await _dio.get("/students?class=$classN");
+      if (response.statusCode == 200) {
+        final data = response.data as List<dynamic>;
+        List<Student> students =
+            data.map((json) => Student.fromJson(json)).toList();
+        return students;
+      } else {
+        throw Exception('Failed to load students');
+      }
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stacktrace");
+      }
+      throw Exception('Failed to load students: $error');
+    }
+  }
+
+  Future<Student> createStudent(Map<String, dynamic> student) async {
+    try {
+      final response = await _dio.post("/students", data: student);
+      if (response.statusCode == 201) {
+        Student student = Student.fromJson(response.data);
+        return student;
+      } else {
+        throw Exception("Failed to create user");
+      }
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stackTrace");
+      }
+      throw Exception('Failed to create user: $error');
+    }
+  }
 }

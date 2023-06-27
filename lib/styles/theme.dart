@@ -14,7 +14,7 @@ class AppTheme {
 
   static ThemeData darkTheme() {
     return ThemeData.dark().copyWith(
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+      // colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
       primaryColor: AppColors.primary,
       secondaryHeaderColor: AppColors.secondary,
       useMaterial3: true,

@@ -15,6 +15,10 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
     on<StudentOverInitialEvent>(studentOverInitialEvent);
     on<EmployeeOverInitialEvent>(employeeOverInitialEvent);
     on<TeacherOverInitialEvent>(teacherOverInitialEvent);
+    on<StudentListInitialEvent>(studentListInitialEvent);
+    on<StudentListAddNewButtonClickEvent>(studentListAddNewButtonClickEvent);
+    on<StudentCreateButtonClickEvent>(studentCreateButtonClickEvent);
+    on<StudentDetailViewButtonClickEvent>(studentDetailViewButtonClickEvent);
   }
 
   FutureOr<void> overviewInitialEvent(
@@ -32,4 +36,38 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
 
   FutureOr<void> teacherOverInitialEvent(
       TeacherOverInitialEvent event, Emitter<OverviewState> emit) {}
+
+  FutureOr<void> studentListInitialEvent(
+      StudentListInitialEvent event, Emitter<OverviewState> emit) async {
+    emit(StudentListLoadingState());
+    List<Student> students =
+        await _managementRepository.getStudentsByClass(event.className);
+    emit(StudentListLoadedSuccessState(students: students));
+  }
+
+  FutureOr<void> studentListAddNewButtonClickEvent(
+      StudentListAddNewButtonClickEvent event, Emitter<OverviewState> emit) {
+    emit(StudentListAddNewButtonClickState(className: event.className));
+  }
+
+  FutureOr<void> studentCreateButtonClickEvent(
+      StudentCreateButtonClickEvent event, Emitter<OverviewState> emit) async {
+    emit(StudentCreateLoadingState());
+    Student student = await _managementRepository.createStudent(
+      event.firstName,
+      event.lastName,
+      event.email,
+      event.dob,
+      event.address,
+      event.phone,
+      event.className,
+      event.parentsDetail,
+    );
+    emit(StudentCreatedSuccessState(student));
+  }
+
+  FutureOr<void> studentDetailViewButtonClickEvent(
+      StudentDetailViewButtonClickEvent event, Emitter<OverviewState> emit) {
+    emit(StudentDetailViewButtonClickedState(event.student));
+  }
 }

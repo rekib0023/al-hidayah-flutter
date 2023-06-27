@@ -2,7 +2,7 @@ import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/home/ui/home.dart';
 import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
 import 'package:al_hidayah/features/login/ui/login_screen.dart';
-import 'package:al_hidayah/features/overview/ui/student_overview.dart';
+import 'package:al_hidayah/features/overview/ui/student_overview/student_overview.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +44,7 @@ class DrawerWrapper extends StatelessWidget {
             ),
             drawer: DrawerMenu(
               bloc: _bloc,
+              authBloc: authBloc,
             ),
             body: BlocBuilder<DrawerBloc, DrawerState>(
               bloc: _bloc,
@@ -51,6 +52,8 @@ class DrawerWrapper extends StatelessWidget {
                 switch (state.runtimeType) {
                   case DrawerStudentOverivewButtonClickActionState:
                     return const StudentOverview();
+                  case DrawerHomeButtonClickActionState:
+                    return const HomeScreen();
                   default:
                     return const StudentOverview();
                 }

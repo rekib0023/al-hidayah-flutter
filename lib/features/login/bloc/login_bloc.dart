@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
     on<AuthInitialEvent>(authInitial);
     on<AuthLoginButtonClickedEvent>(authLoginButtonClickedEvent);
+    on<AuthLogoutButtonClickedEvent>(authLogoutButtonClickedEvent);
   }
 
   FutureOr<void> authInitial(AuthInitialEvent event, Emitter<AuthState> emit) {}
@@ -28,5 +29,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (err) {
       emit(AuthErrorState(message: "Invalid credentials"));
     }
+  }
+
+  FutureOr<void> authLogoutButtonClickedEvent(
+      AuthLogoutButtonClickedEvent event, Emitter<AuthState> emit) {
+    emit(AuthLoadingState());
+    emit(AuthInitial());
   }
 }

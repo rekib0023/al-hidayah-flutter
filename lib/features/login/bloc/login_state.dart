@@ -21,3 +21,5 @@ class AuthErrorState extends AuthState {
 }
 
 class AuthLoginButtonClickedState extends AuthActionState {}
+
+class AuthLogoutButtonClickedState extends AuthActionState {}

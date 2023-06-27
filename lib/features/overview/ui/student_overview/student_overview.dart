@@ -1,5 +1,6 @@
 import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
-import 'package:al_hidayah/features/overview/ui/student_chart.dart';
+import 'package:al_hidayah/features/overview/ui/student_overview/student_chart.dart';
+import 'package:al_hidayah/features/overview/ui/student_overview/student_listview.dart';
 import 'package:al_hidayah/models/students.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -46,29 +47,45 @@ class _StudentOverviewState extends State<StudentOverview> {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(24.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => StudentListView(
+                                      overviewBloc: overviewBloc,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(24.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Text(
-                              'Total Enrolled:\n$totalEnrolled Students',
-                              style: AppTextStyles.title,
-                              textAlign: TextAlign.center,
+                                child: Text(
+                                  'Total Enrolled:\n$totalEnrolled Students',
+                                  style: AppTextStyles.title,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      Container(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
                         height: 400,
                         child: buildBarChart(students),
                       ),
@@ -77,7 +94,7 @@ class _StudentOverviewState extends State<StudentOverview> {
                 ),
               );
             default:
-              return Text("a");
+              return const SizedBox();
           }
         },
       ),
