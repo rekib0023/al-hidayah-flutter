@@ -38,16 +38,25 @@ class PrimaryButton extends StatelessWidget {
 class SecondaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final Color color;
 
-  const SecondaryButton(
-      {super.key, required this.text, required this.onPressed});
+  const SecondaryButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.color = AppColors.primary,
+  });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.primary,
+        side: BorderSide(
+          color: color, // Specify the desired border color here
+          width: 1.0, // Adjust the border width if needed
+        ),
+        foregroundColor: color,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -56,7 +65,7 @@ class SecondaryButton extends StatelessWidget {
       child: Text(
         text,
         style: AppTextStyles.buttonText.copyWith(
-          color: AppColors.primary,
+          color: color,
         ),
       ),
     );

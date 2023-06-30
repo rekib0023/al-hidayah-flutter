@@ -1,3 +1,4 @@
+import 'package:al_hidayah/features/announcements/ui/announcements.dart';
 import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
 import 'package:al_hidayah/styles/colors.dart';
@@ -28,17 +29,28 @@ class DrawerMenu extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: AppColors.primary,
                 ),
-                child: RichText(
-                  text: TextSpan(
-                    text: "Al-Hidayah\n",
-                    style: AppTextStyles.heading.copyWith(color: Colors.white),
-                    children: const [
-                      TextSpan(
-                        text: "International Public School",
-                        style: AppTextStyles.subtitle,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: Image.asset('lib/assets/images/logo.jpeg'),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        text: "Al-Hidayah\n",
+                        style:
+                            AppTextStyles.heading.copyWith(color: Colors.white),
+                        children: const [
+                          TextSpan(
+                            text: "International Public School",
+                            style: AppTextStyles.subtitle,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               ListTile(
@@ -68,17 +80,6 @@ class DrawerMenu extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.admin_panel_settings_outlined),
-                    title: const Text('Management'),
-                    onTap: () {
-                      bloc.add(
-                        DrawerMenuItemClickedEvent(
-                            itemName: "management-overview"),
-                      );
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ListTile(
                     leading: const Icon(Icons.supervisor_account_outlined),
                     title: const Text('Employee'),
                     onTap: () {
@@ -89,16 +90,34 @@ class DrawerMenu extends StatelessWidget {
                       Navigator.of(context).pop();
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.admin_panel_settings_outlined),
+                    title: const Text('Management'),
+                    onTap: () {
+                      bloc.add(
+                        DrawerMenuItemClickedEvent(
+                            itemName: "management-overview"),
+                      );
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ],
               ),
               ListTile(
-                leading: const Icon(Icons.announcement_outlined),
+                leading: const Icon(Icons.campaign),
                 title: const Text("Announcements"),
                 onTap: () {
-                  bloc.add(
-                    DrawerMenuItemClickedEvent(itemName: "announcements"),
-                  );
                   Navigator.of(context).pop();
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const Announcements(),
+                    ),
+                  );
+                  // bloc.add(
+                  //   DrawerMenuItemClickedEvent(itemName: "announcements"),
+                  // );
+                  // Navigator.of(context).pop();
                 },
               ),
               const Divider(),

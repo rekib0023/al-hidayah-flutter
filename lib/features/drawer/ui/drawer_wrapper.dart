@@ -1,3 +1,4 @@
+import 'package:al_hidayah/features/announcements/ui/announcements.dart';
 import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/home/ui/home.dart';
 import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
@@ -33,14 +34,14 @@ class DrawerWrapper extends StatelessWidget {
                 style: AppTextStyles.title.copyWith(color: Colors.white),
               ),
               centerTitle: true,
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.notifications_none_outlined,
-                  ),
-                )
-              ],
+              // actions: [
+              //   IconButton(
+              //     onPressed: () {},
+              //     icon: const Icon(
+              //       Icons.notifications_none_outlined,
+              //     ),
+              //   )
+              // ],
             ),
             drawer: DrawerMenu(
               bloc: _bloc,
@@ -52,10 +53,12 @@ class DrawerWrapper extends StatelessWidget {
                 switch (state.runtimeType) {
                   case DrawerStudentOverivewButtonClickActionState:
                     return const StudentOverview();
+                  case DrawerAnnouncementsButtonClickActionState:
+                    return const Announcements();
                   case DrawerHomeButtonClickActionState:
                     return const HomeScreen();
                   default:
-                    return const StudentOverview();
+                    return const HomeScreen();
                 }
               },
             ),

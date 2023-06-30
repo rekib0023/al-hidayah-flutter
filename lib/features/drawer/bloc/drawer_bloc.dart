@@ -29,6 +29,8 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
         emit(DrawerManagementOverivewButtonClickActionState());
       case 'employee-overview':
         emit(DrawerEmployeeOverivewButtonClickActionState());
+      case 'announcements':
+        emit(DrawerAnnouncementsButtonClickActionState());
       default:
         emit(DrawerHomeButtonClickActionState());
     }

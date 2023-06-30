@@ -1,4 +1,8 @@
+import 'package:al_hidayah/features/announcements/ui/announcements.dart';
 import 'package:al_hidayah/features/home/bloc/home_bloc.dart';
+import 'package:al_hidayah/features/home/ui/home_grid.dart';
+import 'package:al_hidayah/features/home/ui/notice_card.dart';
+import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,8 +27,47 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             );
           case HomeInitial:
-            return const Scaffold(
-              body: Text("home"),
+            return Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Notices",
+                            style: AppTextStyles.title,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const Announcements(),
+                              ));
+                            },
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Text("see more"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const NoticeCard(),
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: HomeGrid(),
+                    )
+                  ],
+                ),
+              ),
             );
           default:
             return const SizedBox();

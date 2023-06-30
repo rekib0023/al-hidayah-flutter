@@ -17,3 +17,5 @@ class DrawerManagementOverivewButtonClickActionState
     extends DrawerActionState {}
 
 class DrawerEmployeeOverivewButtonClickActionState extends DrawerActionState {}
+
+class DrawerAnnouncementsButtonClickActionState extends DrawerActionState {}

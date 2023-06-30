@@ -1,5 +1,5 @@
 import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
-import 'package:al_hidayah/features/overview/ui/student_overview/student_chart.dart';
+import 'package:al_hidayah/features/overview/ui/student_overview/Student_Chart.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_listview.dart';
 import 'package:al_hidayah/models/students.dart';
 import 'package:al_hidayah/styles/text_styles.dart';

@@ -1,6 +1,6 @@
 import 'package:al_hidayah/models/students.dart';
-import 'package:al_hidayah/styles/colors.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
+import 'package:al_hidayah/widgets/App_Bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,14 +16,7 @@ class _StudentDetailViewState extends State<StudentDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: AppColors.primary,
-        title: Text(
-          "Student Details",
-          style: AppTextStyles.title.copyWith(color: Colors.white),
-        ),
-      ),
+      appBar: appBar(title: "Student Detail"),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: SingleChildScrollView(
@@ -66,8 +59,8 @@ class _StudentDetailViewState extends State<StudentDetailView> {
                 ),
               ),
               const SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
+              SelectableText.rich(
+                TextSpan(
                   text: "Email: ",
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -83,8 +76,8 @@ class _StudentDetailViewState extends State<StudentDetailView> {
                 ),
               ),
               const SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
+              SelectableText.rich(
+                TextSpan(
                   text: "Phone: ",
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,

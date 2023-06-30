@@ -2,11 +2,11 @@ import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_create.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_detailview.dart';
 import 'package:al_hidayah/models/students.dart';
-import 'package:al_hidayah/styles/colors.dart';
-import 'package:al_hidayah/styles/text_styles.dart';
+import 'package:al_hidayah/widgets/App_Bar.dart';
 import 'package:al_hidayah/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StudentListView extends StatefulWidget {
   const StudentListView({super.key, required this.overviewBloc});
@@ -47,14 +47,7 @@ class _StudentListViewState extends State<StudentListView> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
-          backgroundColor: AppColors.primary,
-          title: Text(
-            "Student List",
-            style: AppTextStyles.title.copyWith(color: Colors.white),
-          ),
-        ),
+        appBar: appBar(title: "Student List"),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
           child: SingleChildScrollView(
@@ -144,16 +137,27 @@ class _StudentListViewState extends State<StudentListView> {
                                             student.rollNumber.toString())),
                                         DataCell(Text(
                                             "${student.user.firstName} ${student.user.lastName}")),
-                                        DataCell(Text(
-                                            student.user.phone.toString())),
+                                        DataCell(
+                                          TextButton(
+                                            child: Text(
+                                              student.user.phone.toString(),
+                                            ),
+                                            onPressed: () {
+                                              launchUrl(Uri.parse(
+                                                  "tel://${student.user.phone}"));
+                                            },
+                                          ),
+                                        ),
 
                                         DataCell(
                                           TextButton(
                                             child: const Text("View"),
                                             onPressed: () {
                                               widget.overviewBloc.add(
-                                                  StudentDetailViewButtonClickEvent(
-                                                      student));
+                                                StudentDetailViewButtonClickEvent(
+                                                  student,
+                                                ),
+                                              );
                                             },
                                           ),
                                         ),
