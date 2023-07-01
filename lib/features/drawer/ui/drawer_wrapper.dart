@@ -5,21 +5,40 @@ import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
 import 'package:al_hidayah/features/login/ui/login_screen.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_overview.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
+import 'package:al_hidayah/utils/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../styles/colors.dart';
 import 'drawer.dart';
 
-class DrawerWrapper extends StatelessWidget {
-  DrawerWrapper({super.key, required this.authBloc});
-  final DrawerBloc _bloc = DrawerBloc();
+class DrawerWrapper extends StatefulWidget {
+  const DrawerWrapper({super.key, required this.authBloc});
   final AuthBloc authBloc;
+
+  @override
+  State<DrawerWrapper> createState() => _DrawerWrapperState();
+}
+
+class _DrawerWrapperState extends State<DrawerWrapper> {
+  final DrawerBloc _bloc = DrawerBloc();
+
+  String? authToken = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getTokenAndInitialize();
+  }
+
+  void getTokenAndInitialize() async {
+    authToken = await Store.getToken();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
-      bloc: authBloc,
+      bloc: widget.authBloc,
       listener: (context, state) {},
       builder: (context, state) {
         if (state is! AuthLoadedSucessState) {
@@ -34,18 +53,10 @@ class DrawerWrapper extends StatelessWidget {
                 style: AppTextStyles.title.copyWith(color: Colors.white),
               ),
               centerTitle: true,
-              // actions: [
-              //   IconButton(
-              //     onPressed: () {},
-              //     icon: const Icon(
-              //       Icons.notifications_none_outlined,
-              //     ),
-              //   )
-              // ],
             ),
             drawer: DrawerMenu(
               bloc: _bloc,
-              authBloc: authBloc,
+              authBloc: widget.authBloc,
             ),
             body: BlocBuilder<DrawerBloc, DrawerState>(
               bloc: _bloc,

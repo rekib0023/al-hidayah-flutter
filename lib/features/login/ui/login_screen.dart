@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SvgPicture.asset(
-                                'lib/assets/icons/building.svg',
+                                'assets/icons/building.svg',
                                 width: 48, // Adjust the size as needed
                                 height: 48,
                                 color: AppColors.primary,

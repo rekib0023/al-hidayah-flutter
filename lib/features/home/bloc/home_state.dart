@@ -22,3 +22,9 @@ class HomeStudentViewClassClickedActionState extends HomeActionState {
 
   HomeStudentViewClassClickedActionState({required this.className});
 }
+
+class HomeGridCalendarClickedActionState extends HomeActionState {}
+
+class HomeGridStoreClickedActionState extends HomeActionState {}
+
+class HomeGridExpensesClickedActionState extends HomeActionState {}

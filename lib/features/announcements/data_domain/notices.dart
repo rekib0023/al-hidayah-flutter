@@ -25,18 +25,21 @@ class Notice {
     required this.id,
     required this.title,
     required this.description,
-    required this.date,
+    required this.createdAt,
+    required this.updatedAt,
   });
   late final String id;
   late final String title;
   late final String description;
-  late final String date;
+  late final String createdAt;
+  late final String updatedAt;
 
   Notice.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     title = json['title'];
     description = json['description'];
-    date = json['date'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {

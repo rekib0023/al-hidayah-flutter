@@ -1,4 +1,4 @@
-import 'package:al_hidayah/models/students.dart';
+import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:al_hidayah/widgets/App_Bar.dart';
 import 'package:flutter/material.dart';

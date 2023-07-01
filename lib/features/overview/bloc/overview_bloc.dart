@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:al_hidayah/features/overview/data_domain/management_repositories.dart';
-import 'package:al_hidayah/models/students.dart';
+import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 

@@ -1,4 +1,4 @@
-import 'users.dart';
+import '../../../models/users.dart';
 
 class Student {
   Student({

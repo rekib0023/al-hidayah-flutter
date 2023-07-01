@@ -1,4 +1,4 @@
-import 'package:al_hidayah/models/notices.dart';
+import 'package:al_hidayah/features/announcements/data_domain/notices.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -59,6 +59,21 @@ class AnnouncementService {
         return NoticeList.fromJson(response.data);
       } else {
         throw Exception("Failed to get notice");
+      }
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stacktrace");
+      }
+      throw Exception("Failed to get notices");
+    }
+  }
+
+  Future<void> deleteNotice(String id) async {
+    try {
+      final response = await _dio.delete("/notices/$id");
+      if (response.statusCode == 204) {
+      } else {
+        throw Exception("Failed to delete notice");
       }
     } catch (error, stacktrace) {
       if (kDebugMode) {

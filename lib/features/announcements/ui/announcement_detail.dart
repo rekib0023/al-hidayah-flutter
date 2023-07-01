@@ -1,5 +1,5 @@
 import 'package:al_hidayah/features/announcements/bloc/announcement_bloc.dart';
-import 'package:al_hidayah/models/notices.dart';
+import 'package:al_hidayah/features/announcements/data_domain/notices.dart';
 import 'package:al_hidayah/styles/colors.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:al_hidayah/widgets/App_Bar.dart';
@@ -16,7 +16,6 @@ class AnnouncementDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // bloc.add(AnnouncementInitialEvent(limit: "5", showAll: "false"));
         return true;
       },
       child: Scaffold(
@@ -24,7 +23,18 @@ class AnnouncementDetail extends StatelessWidget {
         body: SingleChildScrollView(
           child: BlocConsumer<AnnouncementBloc, AnnouncementState>(
             bloc: bloc,
-            listener: (context, state) {},
+            listener: (context, state) {
+              if (state is AnnoucementDeleteState) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    backgroundColor: AppColors.red,
+                    content: Text("Notice deleted"),
+                  ),
+                );
+                Navigator.of(context).pop();
+              }
+            },
             builder: (context, state) {
               switch (state.runtimeType) {
                 case AnnouncementDetailState:
@@ -57,7 +67,10 @@ class AnnouncementDetail extends StatelessWidget {
                             Expanded(
                               child: SecondaryButton(
                                 text: "Delete",
-                                onPressed: () {},
+                                onPressed: () {
+                                  bloc.add(AnnoucementDeleteButtonClickedEvent(
+                                      notice.id));
+                                },
                                 color: AppColors.red,
                               ),
                             ),

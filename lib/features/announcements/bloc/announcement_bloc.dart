@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:al_hidayah/features/announcements/data_domain/announcement_repositories.dart';
-import 'package:al_hidayah/models/notices.dart';
+import 'package:al_hidayah/features/announcements/data_domain/notices.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,6 +14,10 @@ class AnnouncementBloc extends Bloc<AnnouncementEvent, AnnouncementState> {
   AnnouncementBloc() : super(AnnouncementInitial()) {
     on<AnnouncementInitialEvent>(announcementInitialEvent);
     on<AnnouncementViewButtonClickedEvent>(announcementViewButtonClickedEvent);
+    on<AnnouncementEventSearchButtonClickedEvent>(
+        announcementEventSearchButtonClickedEvent);
+    on<AnnoucementDeleteButtonClickedEvent>(
+        annoucementDeleteButtonClickedEvent);
   }
 
   FutureOr<void> announcementInitialEvent(
@@ -33,5 +37,28 @@ class AnnouncementBloc extends Bloc<AnnouncementEvent, AnnouncementState> {
       Emitter<AnnouncementState> emit) {
     emit(AnnouncementViewButtonClick());
     emit(AnnouncementDetailState(event.notice));
+  }
+
+  FutureOr<void> announcementEventSearchButtonClickedEvent(
+      AnnouncementEventSearchButtonClickedEvent event,
+      Emitter<AnnouncementState> emit) {
+    String search = event.search;
+    List<Notice> allNotices = event.notices;
+    List<Notice> filteredNotices = allNotices.where((notice) {
+      final lowerCaseSearch = search.toLowerCase();
+      final lowerCaseTitle = notice.title.toLowerCase();
+      final lowerCaseDescription = notice.description.toLowerCase();
+
+      return lowerCaseTitle.contains(lowerCaseSearch) ||
+          lowerCaseDescription.contains(lowerCaseSearch);
+    }).toList();
+    emit(AnnouncementFilteredNotices(filteredNotices));
+  }
+
+  FutureOr<void> annoucementDeleteButtonClickedEvent(
+      AnnoucementDeleteButtonClickedEvent event,
+      Emitter<AnnouncementState> emit) async {
+    await _announcementRepository.deleteNotice(event.id);
+    emit(AnnoucementDeleteState());
   }
 }

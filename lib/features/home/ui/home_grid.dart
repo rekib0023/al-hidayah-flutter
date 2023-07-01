@@ -1,8 +1,11 @@
+import 'package:al_hidayah/features/home/bloc/home_bloc.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class HomeGrid extends StatelessWidget {
-  HomeGrid({super.key});
+  HomeGrid({super.key, required this.bloc});
+
+  final HomeBloc bloc;
 
   final widgetList = [
     {
@@ -50,6 +53,7 @@ class HomeGrid extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return GridCard(
           element: widgetList[index],
+          bloc: bloc,
         );
       },
     );
@@ -57,14 +61,17 @@ class HomeGrid extends StatelessWidget {
 }
 
 class GridCard extends StatelessWidget {
-  const GridCard({super.key, required this.element});
+  const GridCard({super.key, required this.element, required this.bloc});
 
   final Map<String, dynamic> element;
+  final HomeBloc bloc;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+    return GestureDetector(
+      onTap: () {
+        bloc.add(HomeGridButtonClickEvent(element["title"]));
+      },
       child: Card(
         color: Colors.white,
         shape: Border(

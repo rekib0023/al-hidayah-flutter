@@ -1,4 +1,4 @@
-import 'package:al_hidayah/models/students.dart';
+import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:al_hidayah/utils/constants.dart';
 import 'package:al_hidayah/utils/dio_interceptors.dart';
 import 'package:dio/dio.dart';

@@ -1,7 +1,7 @@
 import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_create.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_detailview.dart';
-import 'package:al_hidayah/models/students.dart';
+import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:al_hidayah/widgets/App_Bar.dart';
 import 'package:al_hidayah/widgets/buttons.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +54,35 @@ class _StudentListViewState extends State<StudentListView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: PrimaryButton(
+                        text: "Add new student",
+                        onPressed: () {
+                          widget.overviewBloc.add(
+                              StudentListAddNewButtonClickEvent(
+                                  className: selectedClass));
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Expanded(
+                      child: SecondaryButton(
+                        text: "Upload sheet",
+                        onPressed: () {
+                          widget.overviewBloc.add(
+                              StudentListAddNewButtonClickEvent(
+                                  className: selectedClass));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
                 DropdownButton<String>(
                   value: selectedClass,
                   onChanged: (String? newValue) {
@@ -177,30 +206,6 @@ class _StudentListViewState extends State<StudentListView> {
                               ),
                             ),
                             const SizedBox(height: 30),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                PrimaryButton(
-                                  text: "Add new student",
-                                  onPressed: () {
-                                    widget.overviewBloc.add(
-                                        StudentListAddNewButtonClickEvent(
-                                            className: selectedClass));
-                                  },
-                                ),
-                                SecondaryButton(
-                                  text: "Upload sheet",
-                                  onPressed: () {
-                                    widget.overviewBloc.add(
-                                        StudentListAddNewButtonClickEvent(
-                                            className: selectedClass));
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 30,
-                            ),
                           ],
                         );
                       default:

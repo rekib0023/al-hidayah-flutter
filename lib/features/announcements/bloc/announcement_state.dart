@@ -22,3 +22,11 @@ class AnnouncementDetailState extends AnnouncementActionState {
 
   AnnouncementDetailState(this.notice);
 }
+
+class AnnouncementFilteredNotices extends AnnouncementState {
+  final List<Notice> notices;
+
+  AnnouncementFilteredNotices(this.notices);
+}
+
+class AnnoucementDeleteState extends AnnouncementActionState {}

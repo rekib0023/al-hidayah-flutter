@@ -1,5 +1,5 @@
 import 'package:al_hidayah/features/announcements/data_domain/announcement_service.dart';
-import 'package:al_hidayah/models/notices.dart';
+import 'package:al_hidayah/features/announcements/data_domain/notices.dart';
 
 class AnnouncementRepository {
   final AnnouncementService _apiService = AnnouncementService();
@@ -25,6 +25,14 @@ class AnnouncementRepository {
   Future<Notice> createNotices(String title, String description) async {
     try {
       return await _apiService.createNotices(title, description);
+    } catch (e) {
+      throw Exception('Failed to create user: $e');
+    }
+  }
+
+  Future<void> deleteNotice(String id) async {
+    try {
+      await _apiService.deleteNotice(id);
     } catch (e) {
       throw Exception('Failed to create user: $e');
     }

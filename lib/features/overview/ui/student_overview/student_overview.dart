@@ -1,7 +1,7 @@
 import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/Student_Chart.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_listview.dart';
-import 'package:al_hidayah/models/students.dart';
+import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,23 +24,25 @@ class _StudentOverviewState extends State<StudentOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<OverviewBloc, OverviewState>(
-        bloc: overviewBloc,
-        listenWhen: (previous, current) => current is OverviewActionState,
-        buildWhen: (previous, current) => current is! OverviewActionState,
-        listener: (context, state) {},
-        builder: (context, state) {
-          switch (state.runtimeType) {
-            case StudentOverLoadingState:
-              return const Center(
+    return BlocConsumer<OverviewBloc, OverviewState>(
+      bloc: overviewBloc,
+      listenWhen: (previous, current) => current is OverviewActionState,
+      buildWhen: (previous, current) => current is! OverviewActionState,
+      listener: (context, state) {},
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case StudentOverLoadingState:
+            return const Scaffold(
+              body: Center(
                 child: CircularProgressIndicator(),
-              );
-            case StudentLoadedSuccessState:
-              final successState = state as StudentLoadedSuccessState;
-              List<Student> students = successState.students;
-              int totalEnrolled = students.length;
-              return Padding(
+              ),
+            );
+          case StudentLoadedSuccessState:
+            final successState = state as StudentLoadedSuccessState;
+            List<Student> students = successState.students;
+            int totalEnrolled = students.length;
+            return Scaffold(
+              body: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SingleChildScrollView(
                   child: Column(
@@ -92,12 +94,14 @@ class _StudentOverviewState extends State<StudentOverview> {
                     ],
                   ),
                 ),
-              );
-            default:
-              return const SizedBox();
-          }
-        },
-      ),
+              ),
+            );
+          default:
+            return const Scaffold(
+              body: SizedBox(),
+            );
+        }
+      },
     );
   }
 }

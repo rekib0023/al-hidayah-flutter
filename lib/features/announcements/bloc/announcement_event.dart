@@ -19,3 +19,16 @@ class AnnouncementViewButtonClickedEvent extends AnnouncementEvent {
 
   AnnouncementViewButtonClickedEvent(this.notice);
 }
+
+class AnnouncementEventSearchButtonClickedEvent extends AnnouncementEvent {
+  final String search;
+  final List<Notice> notices;
+
+  AnnouncementEventSearchButtonClickedEvent(this.search, this.notices);
+}
+
+class AnnoucementDeleteButtonClickedEvent extends AnnouncementEvent {
+  final String id;
+
+  AnnoucementDeleteButtonClickedEvent(this.id);
+}

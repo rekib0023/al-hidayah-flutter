@@ -1,6 +1,6 @@
 import 'package:al_hidayah/features/overview/data_domain/management_service.dart';
 
-import '../../../models/students.dart';
+import 'students.dart';
 
 class ManagementRepository {
   final ManagementService _managementService = ManagementService();

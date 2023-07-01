@@ -1,4 +1,5 @@
 import 'package:al_hidayah/features/announcements/bloc/announcement_bloc.dart';
+import 'package:al_hidayah/features/calendar/bloc/calendar_bloc.dart';
 import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/drawer/ui/drawer_wrapper.dart';
 import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AnnouncementBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CalendarBloc(),
         ),
       ],
       child: MaterialApp(

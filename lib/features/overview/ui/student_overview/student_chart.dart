@@ -1,5 +1,5 @@
 import 'package:al_hidayah/features/overview/data_domain/student_chartdata.dart';
-import 'package:al_hidayah/models/students.dart';
+import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:flutter/material.dart';
 
 import '../../data_domain/chart_model.dart';

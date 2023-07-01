@@ -9,3 +9,9 @@ class HomeStudentClassClickedEvent extends HomeEvent {
   final String className;
   HomeStudentClassClickedEvent({required this.className});
 }
+
+class HomeGridButtonClickEvent extends HomeEvent {
+  final String name;
+
+  HomeGridButtonClickEvent(this.name);
+}

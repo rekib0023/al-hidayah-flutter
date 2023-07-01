@@ -35,7 +35,7 @@ class DrawerMenu extends StatelessWidget {
                   children: [
                     SizedBox(
                       height: 50,
-                      child: Image.asset('lib/assets/images/logo.jpeg'),
+                      child: Image.asset('assets/images/logo.jpeg'),
                     ),
                     RichText(
                       text: TextSpan(

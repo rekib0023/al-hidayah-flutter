@@ -1,6 +1,6 @@
 import 'package:al_hidayah/features/announcements/bloc/announcement_bloc.dart';
 import 'package:al_hidayah/features/announcements/ui/announcement_detail.dart';
-import 'package:al_hidayah/models/notices.dart';
+import 'package:al_hidayah/features/announcements/data_domain/notices.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,53 +41,57 @@ class _NoticeCardState extends State<NoticeCard> {
           case AnnouncementsLoadedSuccess:
             final successStae = state as AnnouncementsLoadedSuccess;
             NoticeList noticeList = successStae.notices;
-            return GestureDetector(
-              onTap: () {
-                _bloc.add(AnnouncementViewButtonClickedEvent(
-                    noticeList.notices[_index]));
-              },
-              child: SizedBox(
-                height: 160,
-                child: PageView.builder(
-                  itemCount: noticeList.notices.length,
-                  controller: PageController(viewportFraction: 0.8),
-                  onPageChanged: (int index) => setState(() => _index = index),
-                  itemBuilder: (_, i) {
-                    return Transform.scale(
-                      scale: i == _index ? 1 : 0.9,
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(noticeList.notices[i].title,
-                                  style: AppTextStyles.text.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis),
-                              const SizedBox(height: 10),
-                              Text(
-                                noticeList.notices[i].description,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            ],
-                          ),
-                        ),
+            return noticeList.notices.isEmpty
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      _bloc.add(AnnouncementViewButtonClickedEvent(
+                          noticeList.notices[_index]));
+                    },
+                    child: SizedBox(
+                      height: 160,
+                      child: PageView.builder(
+                        itemCount: noticeList.notices.length,
+                        controller: PageController(viewportFraction: 0.8),
+                        onPageChanged: (int index) =>
+                            setState(() => _index = index),
+                        itemBuilder: (_, i) {
+                          return Transform.scale(
+                            scale: i == _index ? 1 : 0.9,
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(noticeList.notices[i].title,
+                                        style: AppTextStyles.text.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      noticeList.notices[i].description,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
-            );
+                    ),
+                  );
+
           default:
             return const SizedBox();
         }
