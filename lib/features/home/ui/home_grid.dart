@@ -24,7 +24,7 @@ class HomeGrid extends StatelessWidget {
       "color": const Color(0xAAFF6E31),
     },
     {
-      "title": "Admission",
+      "title": "Pre-Admission",
       "icon": Icons.supervised_user_circle,
       "color": const Color(0xAA090580),
     },

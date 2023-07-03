@@ -28,3 +28,5 @@ class HomeGridCalendarClickedActionState extends HomeActionState {}
 class HomeGridStoreClickedActionState extends HomeActionState {}
 
 class HomeGridExpensesClickedActionState extends HomeActionState {}
+
+class HomeGridPreAdmissionClickedActionState extends HomeActionState {}

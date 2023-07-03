@@ -25,6 +25,12 @@ class StudentLoadedSuccessState extends OverviewState {
   StudentLoadedSuccessState({required this.students});
 }
 
+class EmployeeLoadedSuccessState extends OverviewState {
+  final List<Employee> employees;
+
+  EmployeeLoadedSuccessState({required this.employees});
+}
+
 class StudentListLoadingState extends OverviewState {}
 
 class StudentListInitialState extends OverviewState {}
@@ -58,3 +64,5 @@ class StudentDetailViewButtonClickedState extends OverviewActionState {
 
   StudentDetailViewButtonClickedState(this.student);
 }
+
+class EmployeeAttendanceAddedActionState extends OverviewActionState {}

@@ -3,6 +3,7 @@ import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/home/ui/home.dart';
 import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
 import 'package:al_hidayah/features/login/ui/login_screen.dart';
+import 'package:al_hidayah/features/overview/ui/employee_overview/employee_overview.dart';
 import 'package:al_hidayah/features/overview/ui/student_overview/student_overview.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:al_hidayah/utils/store.dart';
@@ -64,6 +65,10 @@ class _DrawerWrapperState extends State<DrawerWrapper> {
                 switch (state.runtimeType) {
                   case DrawerStudentOverivewButtonClickActionState:
                     return const StudentOverview();
+                  case DrawerEmployeeOverivewButtonClickActionState:
+                    return const EmployeeOverview();
+                  case DrawerManagementOverivewButtonClickActionState:
+                    return const HomeScreen();
                   case DrawerAnnouncementsButtonClickActionState:
                     return const Announcements();
                   case DrawerHomeButtonClickActionState:

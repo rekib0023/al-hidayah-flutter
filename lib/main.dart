@@ -2,6 +2,7 @@ import 'package:al_hidayah/features/announcements/bloc/announcement_bloc.dart';
 import 'package:al_hidayah/features/calendar/bloc/calendar_bloc.dart';
 import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/drawer/ui/drawer_wrapper.dart';
+import 'package:al_hidayah/features/expenses/bloc/expenses_bloc.dart';
 import 'package:al_hidayah/features/overview/bloc/overview_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CalendarBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ExpensesBloc(),
         ),
       ],
       child: MaterialApp(

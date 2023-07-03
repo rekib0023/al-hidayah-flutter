@@ -149,16 +149,9 @@ class _StudentListViewState extends State<StudentListView> {
                                       numeric: true,
                                     ),
                                     DataColumn(label: Text("Name")),
-                                    // DataColumn(label: Text("Last name")),
                                     DataColumn(label: Text("Phone")),
                                     DataColumn(label: Text("")),
-                                    // DataColumn(label: Text("Email")),
-                                    // DataColumn(label: Text("DOB")),
-                                    // DataColumn(label: Text("Address")),
-                                    // DataColumn(label: Text("Parents Detail")),
                                   ],
-                                  // columnSpacing: 20.0,
-                                  // horizontalMargin: 10.0,
                                   rows: students.map((student) {
                                     return DataRow(
                                       cells: [
@@ -177,7 +170,6 @@ class _StudentListViewState extends State<StudentListView> {
                                             },
                                           ),
                                         ),
-
                                         DataCell(
                                           TextButton(
                                             child: const Text("View"),

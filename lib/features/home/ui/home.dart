@@ -4,6 +4,7 @@ import 'package:al_hidayah/features/expenses/ui/expenses.dart';
 import 'package:al_hidayah/features/home/bloc/home_bloc.dart';
 import 'package:al_hidayah/features/home/ui/home_grid.dart';
 import 'package:al_hidayah/features/home/ui/notice_card.dart';
+import 'package:al_hidayah/features/pre-admission/ui/preadmission.dart';
 import 'package:al_hidayah/features/store/ui/product_store.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
         } else if (state is HomeGridExpensesClickedActionState) {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => const Expenses()));
+        } else if (state is HomeGridPreAdmissionClickedActionState) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const PreAdmission()));
         }
       },
       builder: (context, state) {

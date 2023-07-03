@@ -1,4 +1,6 @@
+import 'package:al_hidayah/features/overview/data_domain/employee.dart';
 import 'package:al_hidayah/features/overview/data_domain/students.dart';
+import 'package:al_hidayah/models/attendance.dart';
 import 'package:al_hidayah/utils/constants.dart';
 import 'package:al_hidayah/utils/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -65,6 +67,58 @@ class ManagementService {
         print("Exception occurred: $error stackTrace: $stackTrace");
       }
       throw Exception('Failed to create user: $error');
+    }
+  }
+
+  Future<List<Employee>> getEmployees() async {
+    try {
+      final response = await _dio.get("/employees");
+      if (response.statusCode == 200) {
+        final data = response.data as List<dynamic>;
+        List<Employee> employees =
+            data.map((json) => Employee.fromJson(json)).toList();
+        return employees;
+      } else {
+        throw Exception('Failed to load employees');
+      }
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stacktrace");
+      }
+      throw Exception('Failed to load employees: $error');
+    }
+  }
+
+  Future<Attendance> addAttendance(
+    String userId,
+    String date,
+    String userType,
+    bool isPresent,
+    String? subject,
+  ) async {
+    try {
+      Map<String, dynamic> payload = {
+        "userId": userId,
+        "date": date,
+        "userType": userType,
+        "isPresent": isPresent,
+      };
+      if (subject != null) {
+        payload["subject"] = subject;
+      }
+      final response = await _dio.post("/attendance", data: payload);
+
+      if (response.statusCode == 201) {
+        Attendance attendance = Attendance.fromJson(response.data);
+        return attendance;
+      } else {
+        throw Exception('Failed to load employees');
+      }
+    } catch (error, stacktrace) {
+      if (kDebugMode) {
+        print("Exception occurred: $error stackTrace: $stacktrace");
+      }
+      throw Exception('Failed to load employees: $error');
     }
   }
 }

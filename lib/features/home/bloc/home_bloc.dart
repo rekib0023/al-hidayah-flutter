@@ -25,6 +25,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(HomeGridStoreClickedActionState());
       case "Expenses":
         emit(HomeGridExpensesClickedActionState());
+      case "Pre-Admission":
+        emit(HomeGridPreAdmissionClickedActionState());
       default:
         emit(HomeInitial());
     }

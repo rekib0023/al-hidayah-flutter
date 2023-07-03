@@ -49,3 +49,18 @@ class StudentDetailViewButtonClickEvent extends OverviewEvent {
 
   StudentDetailViewButtonClickEvent(this.student);
 }
+
+class EmployeeAttendanceBtnClickEvent extends OverviewEvent {
+  final String userId;
+  final bool isPresent;
+  final DateTime date;
+  final String userType;
+  final String? subject;
+
+  EmployeeAttendanceBtnClickEvent(
+      {required this.isPresent,
+      required this.date,
+      required this.userId,
+      required this.userType,
+      this.subject});
+}

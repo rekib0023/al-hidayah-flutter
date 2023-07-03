@@ -1,9 +1,12 @@
+import 'package:al_hidayah/features/expenses/bloc/expenses_bloc.dart';
+import 'package:al_hidayah/features/expenses/data_domain/expense.dart';
 import 'package:al_hidayah/styles/colors.dart';
 import 'package:al_hidayah/styles/text_styles.dart';
 import 'package:al_hidayah/widgets/App_Bar.dart';
 import 'package:al_hidayah/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class Expenses extends StatefulWidget {
@@ -19,10 +22,13 @@ class _ExpensesState extends State<Expenses> {
   bool _showHouseRent = false;
   bool _showElectricity = false;
 
-  double _totalDailyExpenses = 0.0;
-  double _totalSalary = 0.0;
-  double _totalHouseRent = 0.0;
-  double _totalElectricity = 0.0;
+  final ExpensesBloc bloc = ExpensesBloc();
+
+  @override
+  void initState() {
+    bloc.add(ExpensesInitialEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,36 +36,53 @@ class _ExpensesState extends State<Expenses> {
       appBar: appBar(title: "Expenses"),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: ListView(
-          children: [
-            expensesList(),
-            PrimaryButton(
-              text: "Add Expense",
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
-                      child: CreateExpense(),
-                    );
-                  },
+        child: BlocConsumer<ExpensesBloc, ExpensesState>(
+          bloc: bloc,
+          listener: (context, state) {},
+          builder: (context, state) {
+            switch (state.runtimeType) {
+              case ExpensesLoadedSuccessState:
+                final successState = state as ExpensesLoadedSuccessState;
+                List<ExpensesModel> expenses = successState.expenses;
+                return ListView(
+                  children: [
+                    _buildExpensesList(expenses),
+                    const SizedBox(height: 20),
+                    PrimaryButton(
+                      text: "Add Expense",
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: CreateExpense(bloc: bloc),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 );
-              },
-            ),
-            const SizedBox(height: 20),
-          ],
+              default:
+                return Container();
+            }
+          },
         ),
       ),
     );
   }
 
-  Widget expensesList() {
+  Widget _buildDailyExpense(ExpenseData? expenseData) {
+    List<Expense> expenses = expenseData!.expense!;
+
     return Column(
-      children: <Widget>[
+      children: [
         GestureDetector(
           onTap: () {
             HapticFeedback.vibrate();
@@ -70,46 +93,58 @@ class _ExpensesState extends State<Expenses> {
               _showElectricity = false;
             });
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    "Daily Expense",
-                    style: AppTextStyles.title,
-                  ),
-                  Icon(_showDailyExpenses
-                      ? Icons.expand_less
-                      : Icons.expand_more)
-                ],
-              ),
-              Text(
-                '\u{20B9} $_totalDailyExpenses',
-                style: AppTextStyles.title,
-              ),
-            ],
+          child: _buildExpenseRow(
+            text: "Daily Expense",
+            showData: _showDailyExpenses,
+            expenseData: expenseData,
           ),
         ),
-        _showDailyExpenses
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(
-                      label: Text("ID"),
-                      numeric: true,
-                    ),
-                    DataColumn(label: Text("Title")),
-                    DataColumn(label: Text("Amount")),
-                    DataColumn(label: Text("Date")),
-                    DataColumn(label: Text("Description")),
-                  ],
-                  rows: [],
+        if (_showDailyExpenses)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: const [
+                DataColumn(
+                  label: Text("ID"),
+                  numeric: true,
                 ),
-              )
-            : Container(),
-        const SizedBox(height: 20),
+                DataColumn(label: Text("Title")),
+                DataColumn(label: Text("Amount")),
+                DataColumn(label: Text("Date")),
+                DataColumn(label: Text("Description")),
+              ],
+              rows: expenses.map((expense) {
+                int index = expenses.indexOf(expense) + 1;
+                return DataRow(
+                  cells: [
+                    DataCell(Text(index.toString())),
+                    DataCell(Text(expense.title!)),
+                    DataCell(Text(expense.amount!.toString())),
+                    DataCell(
+                      Text(
+                        DateFormat('dd-MM-yyyy').format(
+                          DateTime.parse(expense.date!),
+                        ),
+                      ),
+                    ),
+                    DataCell(Text(expense.description!)),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildHouseRentExpense(ExpenseData? expenseData) {
+    List<Expense> expenses = expenseData!.expense!;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
         GestureDetector(
           onTap: () {
             HapticFeedback.vibrate();
@@ -120,89 +155,54 @@ class _ExpensesState extends State<Expenses> {
               _showElectricity = false;
             });
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    "House Rent",
-                    style: AppTextStyles.title,
-                  ),
-                  Icon(_showHouseRent ? Icons.expand_less : Icons.expand_more)
-                ],
-              ),
-              Text(
-                '\u{20B9} $_totalHouseRent',
-                style: AppTextStyles.title,
-              ),
-            ],
+          child: _buildExpenseRow(
+            text: "House Rent",
+            showData: _showHouseRent,
+            expenseData: expenseData,
           ),
         ),
-        _showHouseRent
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(
-                      label: Text("ID"),
-                      numeric: true,
-                    ),
-                    DataColumn(label: Text("Amount")),
-                    DataColumn(label: Text("Date")),
-                  ],
-                  rows: [],
+        if (_showHouseRent)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: const [
+                DataColumn(
+                  label: Text("ID"),
+                  numeric: true,
                 ),
-              )
-            : Container(),
-        const SizedBox(height: 20),
-        GestureDetector(
-          onTap: () {
-            HapticFeedback.vibrate();
+                DataColumn(label: Text("Amount")),
+                DataColumn(label: Text("Date")),
+              ],
+              rows: expenses.map((expense) {
+                int index = expenses.indexOf(expense) + 1;
+                return DataRow(
+                  cells: [
+                    DataCell(Text(index.toString())),
+                    DataCell(Text(expense.amount!.toString())),
+                    DataCell(
+                      Text(
+                        DateFormat('dd-MM-yyyy').format(
+                          DateTime.parse(expense.date!),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+      ],
+    );
+  }
 
-            setState(() {
-              _showHouseRent = false;
-              _showDailyExpenses = false;
-              _showSalary = false;
-              _showElectricity = !_showElectricity;
-            });
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    "Electricity",
-                    style: AppTextStyles.title,
-                  ),
-                  Icon(_showElectricity ? Icons.expand_less : Icons.expand_more)
-                ],
-              ),
-              Text(
-                '\u{20B9} $_totalElectricity',
-                style: AppTextStyles.title,
-              ),
-            ],
-          ),
-        ),
-        _showElectricity
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(
-                      label: Text("ID"),
-                      numeric: true,
-                    ),
-                    DataColumn(label: Text("Amount")),
-                    DataColumn(label: Text("Date")),
-                  ],
-                  rows: [],
-                ),
-              )
-            : Container(),
-        const SizedBox(height: 20),
+  Widget _buildSalaryExpense(ExpenseData? expenseData) {
+    List<Expense> expenses = expenseData!.expense!;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
         GestureDetector(
           onTap: () {
             HapticFeedback.vibrate();
@@ -214,50 +214,171 @@ class _ExpensesState extends State<Expenses> {
               _showElectricity = false;
             });
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    "Salary",
-                    style: AppTextStyles.title,
-                  ),
-                  Icon(_showSalary ? Icons.expand_less : Icons.expand_more)
-                ],
-              ),
-              Text(
-                '\u{20B9} $_totalSalary',
-                style: AppTextStyles.title,
-              ),
-            ],
+          child: _buildExpenseRow(
+            text: "Salary",
+            showData: _showSalary,
+            expenseData: expenseData,
           ),
         ),
-        _showSalary
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(
-                      label: Text("ID"),
-                      numeric: true,
-                    ),
-                    DataColumn(label: Text("Staff Name")),
-                    DataColumn(label: Text("Amount")),
-                    DataColumn(label: Text("Date")),
-                  ],
-                  rows: [],
+        if (_showSalary)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: const [
+                DataColumn(
+                  label: Text("ID"),
+                  numeric: true,
                 ),
-              )
-            : Container(),
-        const SizedBox(height: 20),
+                DataColumn(label: Text("Staff Name")),
+                DataColumn(label: Text("Amount")),
+                DataColumn(label: Text("Date")),
+              ],
+              rows: expenses.map((expense) {
+                int index = expenses.indexOf(expense) + 1;
+                return DataRow(
+                  cells: [
+                    DataCell(Text(index.toString())),
+                    DataCell(Text(expense.staffName!)),
+                    DataCell(Text(expense.amount!.toString())),
+                    DataCell(
+                      Text(
+                        DateFormat('dd-MM-yyyy').format(
+                          DateTime.parse(expense.date!),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
       ],
+    );
+  }
+
+  Widget _buildElectricityExpense(ExpenseData? expenseData) {
+    List<Expense> expenses = expenseData!.expense!;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () {
+            HapticFeedback.vibrate();
+
+            setState(() {
+              _showHouseRent = false;
+              _showDailyExpenses = false;
+              _showSalary = false;
+              _showElectricity = !_showElectricity;
+            });
+          },
+          child: _buildExpenseRow(
+            text: "Electricity",
+            showData: _showElectricity,
+            expenseData: expenseData,
+          ),
+        ),
+        if (_showElectricity)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: const [
+                DataColumn(
+                  label: Text("ID"),
+                  numeric: true,
+                ),
+                DataColumn(label: Text("Amount")),
+                DataColumn(label: Text("Date")),
+              ],
+              rows: expenses.map((expense) {
+                int index = expenses.indexOf(expense) + 1;
+                return DataRow(
+                  cells: [
+                    DataCell(Text(index.toString())),
+                    DataCell(Text(expense.amount!.toString())),
+                    DataCell(
+                      Text(
+                        DateFormat('dd-MM-yyyy').format(
+                          DateTime.parse(expense.date!),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Text _buildExpenseTotal(ExpenseData expenseData) {
+    return Text(
+      '\u{20B9} ${expenseData.totalAmount}',
+      style: AppTextStyles.title,
+    );
+  }
+
+  Row _buildExpenseRow(
+      {required String text,
+      required bool showData,
+      ExpenseData? expenseData}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Text(text, style: AppTextStyles.title),
+            Icon(showData ? Icons.expand_less : Icons.expand_more)
+          ],
+        ),
+        if (expenseData != null) _buildExpenseTotal(expenseData)
+      ],
+    );
+  }
+
+  Widget _buildExpensesList(List<ExpensesModel> expenses) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: expenses.map((expense) {
+        String? expenseType = expense.expenseType;
+        ExpenseData? expenseData = expense.expenseData;
+        switch (expenseType) {
+          case "Daily Expense":
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildDailyExpense(expenseData),
+            );
+          case "House Rent":
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildHouseRentExpense(expenseData),
+            );
+          case "Electricity":
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildElectricityExpense(expenseData),
+            );
+          case "Salary":
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildSalaryExpense(expenseData),
+            );
+          default:
+            return const SizedBox();
+        }
+      }).toList(),
     );
   }
 }
 
 class CreateExpense extends StatefulWidget {
-  const CreateExpense({super.key});
+  const CreateExpense({super.key, required this.bloc});
+  final ExpensesBloc bloc;
 
   @override
   State<CreateExpense> createState() => _CreateExpenseState();
@@ -318,7 +439,7 @@ class _CreateExpenseState extends State<CreateExpense> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                labelText: 'Repeat',
+                labelText: 'Expense Type',
               ),
             ),
             const SizedBox(height: 16),
@@ -403,7 +524,7 @@ class _CreateExpenseState extends State<CreateExpense> {
               children: [
                 Expanded(
                   child: PrimaryButton(
-                    onPressed: () {},
+                    onPressed: _createExpense,
                     text: "Create",
                   ),
                 ),
@@ -423,5 +544,18 @@ class _CreateExpenseState extends State<CreateExpense> {
         ),
       ),
     );
+  }
+
+  void _createExpense() {
+    Expense expense = Expense(
+      title: _titleController.text,
+      description: _descriptionController.text,
+      amount: int.parse(_amountController.text).toDouble(),
+      date: _dateController.text,
+      staffName: _staffNameController.text,
+      expenseType: _selectedExpenseType,
+    );
+    widget.bloc.add(ExpensesCreateEvent(expense));
+    Navigator.pop(context);
   }
 }

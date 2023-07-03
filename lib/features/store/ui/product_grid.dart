@@ -73,7 +73,7 @@ GestureDetector gridCard({required Map<String, dynamic> element}) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ImageIcon(
-            size: 48,
+            size: 40,
             AssetImage('assets/images/${element["image"]}'),
             color: element["color"],
           ),

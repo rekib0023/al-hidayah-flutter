@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:al_hidayah/features/overview/data_domain/employee.dart';
 import 'package:al_hidayah/features/overview/data_domain/management_repositories.dart';
 import 'package:al_hidayah/features/overview/data_domain/students.dart';
 import 'package:bloc/bloc.dart';
@@ -19,6 +20,7 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
     on<StudentListAddNewButtonClickEvent>(studentListAddNewButtonClickEvent);
     on<StudentCreateButtonClickEvent>(studentCreateButtonClickEvent);
     on<StudentDetailViewButtonClickEvent>(studentDetailViewButtonClickEvent);
+    on<EmployeeAttendanceBtnClickEvent>(employeeAttendanceBtnClickEvent);
   }
 
   FutureOr<void> overviewInitialEvent(
@@ -32,7 +34,11 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
   }
 
   FutureOr<void> employeeOverInitialEvent(
-      EmployeeOverInitialEvent event, Emitter<OverviewState> emit) {}
+      EmployeeOverInitialEvent event, Emitter<OverviewState> emit) async {
+    emit(EmployeeLoadingState());
+    List<Employee> employees = await _managementRepository.getAllEmployees();
+    emit(EmployeeLoadedSuccessState(employees: employees));
+  }
 
   FutureOr<void> teacherOverInitialEvent(
       TeacherOverInitialEvent event, Emitter<OverviewState> emit) {}
@@ -69,5 +75,19 @@ class OverviewBloc extends Bloc<OverviewEvent, OverviewState> {
   FutureOr<void> studentDetailViewButtonClickEvent(
       StudentDetailViewButtonClickEvent event, Emitter<OverviewState> emit) {
     emit(StudentDetailViewButtonClickedState(event.student));
+  }
+
+  FutureOr<void> employeeAttendanceBtnClickEvent(
+      EmployeeAttendanceBtnClickEvent event,
+      Emitter<OverviewState> emit) async {
+    await _managementRepository.addAttendance(
+      event.userId,
+      event.date.toString(),
+      event.userType,
+      event.isPresent,
+      event.subject,
+    );
+
+    emit(EmployeeAttendanceAddedActionState());
   }
 }

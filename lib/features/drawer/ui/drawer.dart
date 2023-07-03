@@ -1,3 +1,4 @@
+import 'package:al_hidayah/features/about_us/ui/about_us.dart';
 import 'package:al_hidayah/features/announcements/ui/announcements.dart';
 import 'package:al_hidayah/features/drawer/bloc/drawer_bloc.dart';
 import 'package:al_hidayah/features/login/bloc/login_bloc.dart';
@@ -85,7 +86,7 @@ class DrawerMenu extends StatelessWidget {
                     onTap: () {
                       bloc.add(
                         DrawerMenuItemClickedEvent(
-                            itemName: "employee-overivew"),
+                            itemName: "employee-overview"),
                       );
                       Navigator.of(context).pop();
                     },
@@ -114,10 +115,18 @@ class DrawerMenu extends StatelessWidget {
                       builder: (context) => const Announcements(),
                     ),
                   );
-                  // bloc.add(
-                  //   DrawerMenuItemClickedEvent(itemName: "announcements"),
-                  // );
-                  // Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: const Text("About us"),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AboutUs(),
+                    ),
+                  );
                 },
               ),
               const Divider(),

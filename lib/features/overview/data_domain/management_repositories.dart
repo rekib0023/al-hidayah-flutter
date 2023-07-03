@@ -1,4 +1,6 @@
+import 'package:al_hidayah/features/overview/data_domain/employee.dart';
 import 'package:al_hidayah/features/overview/data_domain/management_service.dart';
+import 'package:al_hidayah/models/attendance.dart';
 
 import 'students.dart';
 
@@ -44,6 +46,34 @@ class ManagementRepository {
 
     try {
       return await _managementService.createStudent(student);
+    } catch (e) {
+      throw Exception("Failed to load students");
+    }
+  }
+
+  Future<List<Employee>> getAllEmployees() async {
+    try {
+      return await _managementService.getEmployees();
+    } catch (e) {
+      throw Exception("Failed to load students");
+    }
+  }
+
+  Future<Attendance> addAttendance(
+    String userId,
+    String date,
+    String userType,
+    bool isPresent,
+    String? subject,
+  ) async {
+    try {
+      return await _managementService.addAttendance(
+        userId,
+        date,
+        userType,
+        isPresent,
+        subject,
+      );
     } catch (e) {
       throw Exception("Failed to load students");
     }
